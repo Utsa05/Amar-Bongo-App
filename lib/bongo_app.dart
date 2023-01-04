@@ -2,6 +2,7 @@
 
 import 'package:amar_bongo_app/presentation/constants/color.dart';
 import 'package:amar_bongo_app/presentation/constants/string.dart';
+import 'package:amar_bongo_app/presentation/pages/bottom_nav/bottom.dart';
 import 'package:amar_bongo_app/presentation/pages/home/home.dart';
 import 'package:amar_bongo_app/presentation/pages/splash/splash.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +32,7 @@ class BongoApp extends StatelessWidget {
           scaffoldBackgroundColor: AppColor.bgColor),
       debugShowCheckedModeBanner: false,
       title: AppString.appName,
-      home: HomePage(),
+      home: BottomNavPage(),
     );
   }
 }

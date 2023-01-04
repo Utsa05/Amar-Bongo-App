@@ -17,15 +17,8 @@ class FavoritePage extends StatelessWidget {
               fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        iconTheme: const IconThemeData(color: AppColor.primaryColor),
-        elevation: 0.0,
-        leading: IconButton(
-            splashRadius: 25.0,
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(Icons.arrow_back_ios)),
         backgroundColor: AppColor.bgColor,
+        elevation: 0.0,
       ),
       body: const ItemGridPage(
         title: "title",

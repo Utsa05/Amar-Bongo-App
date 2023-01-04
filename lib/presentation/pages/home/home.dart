@@ -6,6 +6,7 @@ import 'package:amar_bongo_app/presentation/pages/favorite/favorite.dart';
 import 'package:amar_bongo_app/presentation/pages/home/subpages/health.dart';
 import 'package:amar_bongo_app/presentation/pages/home/subpages/home_sub.dart';
 import 'package:amar_bongo_app/presentation/pages/item_grid/item_grid.dart';
+import 'package:amar_bongo_app/presentation/pages/notification/notiification.dart';
 import 'package:amar_bongo_app/presentation/pages/search/search.dart';
 import 'package:flutter/material.dart';
 import 'package:buttons_tabbar/buttons_tabbar.dart';
@@ -128,7 +129,7 @@ class CustomAppbar extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (builder) => const FavoritePage()));
+                            builder: (builder) => const NotificationPage()));
                   },
                   icon: const Icon(Icons.notifications_outlined)),
               IconButton(
