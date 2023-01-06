@@ -35,4 +35,9 @@ class FirebaseRepositoryImpl implements FirebaseRepositories {
   Future<void> updateUser(UserEntity user) async {
     return remoteDatasource.updateUser(user);
   }
+
+  @override
+  Future<void> createUser(UserEntity user) async {
+    return remoteDatasource.createUser(user);
+  }
 }

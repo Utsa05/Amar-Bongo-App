@@ -4,6 +4,7 @@ abstract class FirebaseRepositories {
   Future<void> googleAuthentication();
   Future<void> signoutUser();
   Future<void> updateUser(UserEntity user);
+  Future<void> createUser(UserEntity user);
   Future<String> getCurrentUserUID();
   Future<UserEntity> getCurrentUser(String uid);
   Future<bool> isUserSignin();

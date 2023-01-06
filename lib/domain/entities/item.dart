@@ -8,7 +8,7 @@ class ItemEntity extends Equatable {
   final String? category;
   final String? url;
 
-  const ItemEntity(this.category, {this.id, this.title, this.image, this.url});
+  const ItemEntity({this.id, this.title, this.image, this.category, this.url});
 
   @override
   List<Object?> get props => [id, title];
