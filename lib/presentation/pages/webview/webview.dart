@@ -1,18 +1,13 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
-import 'dart:typed_data';
+// ignore_for_file: depend_on_referenced_packages
 
 import 'package:amar_bongo_app/presentation/constants/color.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 // #docregion platform_imports
 // Import for Android features.
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 // Import for iOS features.
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
-import 'package:flutter/material.dart';
 
 class WebviewPage extends StatefulWidget {
   const WebviewPage({super.key});
@@ -150,7 +145,7 @@ Page resource error:
               Text(
                 "Goverment",
                 style: Theme.of(context).textTheme.headline6!.copyWith(
-                    fontSize: 20.0, color: Theme.of(context).primaryColor),
+                    fontSize: 18.0, color: Theme.of(context).primaryColor),
               ),
             ],
           ),

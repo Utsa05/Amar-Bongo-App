@@ -1,7 +1,5 @@
 import 'package:amar_bongo_app/presentation/constants/color.dart';
-import 'package:amar_bongo_app/presentation/constants/string.dart';
 import 'package:flutter/material.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 
 class HealthPage extends StatefulWidget {
   const HealthPage({super.key});
@@ -151,7 +149,7 @@ class _HealthPageState extends State<HealthPage> {
                             children: [
                               Container(
                                 height: 80,
-                                width: 90.0,
+                                width: 80.0,
                                 color: AppColor.bgColor,
                               ),
                               Positioned(
@@ -193,7 +191,7 @@ class _HealthPageState extends State<HealthPage> {
                                         .textTheme
                                         .headline6!
                                         .copyWith(
-                                            fontSize: 17.0,
+                                            fontSize: 15.0,
                                             fontWeight: FontWeight.normal,
                                             color: AppColor.blackColor
                                                 .withOpacity(0.9)),
@@ -265,8 +263,8 @@ class _HealthPageState extends State<HealthPage> {
                           Padding(
                             padding: const EdgeInsets.only(right: 10.0),
                             child: MaterialButton(
-                              minWidth: 70.0,
-                              height: 30.0,
+                              minWidth: 60.0,
+                              height: 27.0,
                               elevation: 0.0,
                               color: AppColor.goldenColor,
                               shape: RoundedRectangleBorder(

@@ -12,7 +12,7 @@ class ProfilePage extends StatelessWidget {
           "Profile",
           style: Theme.of(context).textTheme.headline6!.copyWith(
               color: AppColor.primaryColor,
-              fontSize: 22.0,
+              fontSize: 18.0,
               fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -51,14 +51,14 @@ class ProfilePage extends StatelessWidget {
                   style: Theme.of(context)
                       .textTheme
                       .headline6!
-                      .copyWith(color: AppColor.blackColor, fontSize: 20.0),
+                      .copyWith(color: AppColor.blackColor, fontSize: 19.0),
                 ),
                 subtitle: Text(
                   "john@gmail.com",
                   style: Theme.of(context).textTheme.headline6!.copyWith(
                       color: AppColor.blackColor,
                       fontWeight: FontWeight.normal,
-                      fontSize: 14.0),
+                      fontSize: 13.0),
                 ),
                 leading: Container(
                   width: 70.0,
@@ -105,13 +105,14 @@ class ItemWIdget extends StatelessWidget {
       onTap: () {},
       contentPadding: const EdgeInsets.all(0.0),
       leading: Container(
-        height: 40.0,
-        width: 30.0,
+        height: 35.0,
+        width: 25.0,
         decoration: BoxDecoration(
             color: Theme.of(context).primaryColor,
             borderRadius: BorderRadius.circular(5.0)),
         child: Icon(
           icon,
+          size: 16.0,
           color: AppColor.whiteColor,
         ),
       ),
@@ -120,7 +121,7 @@ class ItemWIdget extends StatelessWidget {
         style: Theme.of(context)
             .textTheme
             .headline6!
-            .copyWith(color: AppColor.blackColor, fontSize: 20.0),
+            .copyWith(color: AppColor.blackColor, fontSize: 16.0),
       ),
     );
   }

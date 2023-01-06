@@ -1,4 +1,4 @@
-package com.example.amar_bongo_app
+package com.nullit00.amar_bongo
 
 import io.flutter.embedding.android.FlutterActivity
 

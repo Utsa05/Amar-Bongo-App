@@ -13,7 +13,7 @@ class FavoritePage extends StatelessWidget {
           "Favorite (13)",
           style: Theme.of(context).textTheme.headline6!.copyWith(
               color: AppColor.primaryColor,
-              fontSize: 22.0,
+              fontSize: 18.0,
               fontWeight: FontWeight.bold),
         ),
         centerTitle: true,

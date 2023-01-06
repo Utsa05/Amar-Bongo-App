@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "274950754236",
+    "project_id": "amar-bongo",
+    "storage_bucket": "amar-bongo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:274950754236:android:e181e7bf6f3f36af3325b9",
+        "android_client_info": {
+          "package_name": "com.nullit00.amar_bongo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "274950754236-e56pvfc246ioi1a46k52qt28vodhm9ag.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nullit00.amar_bongo",
+            "certificate_hash": "11673524b32ccc38c47f8b674f6ab1f87b3a7224"
+          }
+        },
+        {
+          "client_id": "274950754236-trnil9eteuedciktjrbo2esr630s886a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDR9JUhKZQC2qJJP4muc0YrQoo7EdqE9Sk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "274950754236-trnil9eteuedciktjrbo2esr630s886a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -68,8 +68,8 @@ class SearchPage extends StatelessWidget {
                 ),
               ],
             ),
-            Expanded(
-              child: const ItemGridPage(
+            const Expanded(
+              child: ItemGridPage(
                 title: "title",
                 isFavorite: false,
               ),
