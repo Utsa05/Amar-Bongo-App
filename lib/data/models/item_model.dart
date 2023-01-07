@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:amar_bongo_app/domain/entities/item.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 

@@ -7,7 +7,7 @@ class IsSigninUsecase {
     required this.firebaseRepositories,
   });
 
-  Future<void> isUserSignin() {
+  Future<bool> call() {
     return firebaseRepositories.isUserSignin();
   }
 }

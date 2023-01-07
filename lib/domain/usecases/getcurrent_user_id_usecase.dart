@@ -7,7 +7,7 @@ class GetCurrentUserIDUsecase {
     required this.firebaseRepositories,
   });
 
-  Future<String> googleAuthentication() {
+  Future<String> call() {
     return firebaseRepositories.getCurrentUserUID();
   }
 }

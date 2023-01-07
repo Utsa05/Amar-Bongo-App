@@ -7,7 +7,7 @@ class GoogleAuthenticationUsecase {
     required this.firebaseRepositories,
   });
 
-  Future<void> googleAuthentication() {
+  Future<void> call() {
     return firebaseRepositories.googleAuthentication();
   }
 }

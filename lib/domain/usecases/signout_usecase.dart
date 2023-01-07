@@ -7,7 +7,7 @@ class SignoutUsecase {
     required this.firebaseRepositories,
   });
 
-  Future<void> signoutUser() {
+  Future<void> call() {
     return firebaseRepositories.signoutUser();
   }
 }

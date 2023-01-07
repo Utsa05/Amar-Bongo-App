@@ -8,7 +8,7 @@ class CreateUserUsecase {
     required this.firebaseRepositories,
   });
 
-  Future<void> createUser(UserEntity user) {
+  Future<void> call(UserEntity user) {
     return firebaseRepositories.createUser(user);
   }
 }

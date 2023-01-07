@@ -1,5 +1,6 @@
 import 'package:amar_bongo_app/domain/entities/user.dart';
 
+// ignore: depend_on_referenced_packages
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserModel extends UserEntity {

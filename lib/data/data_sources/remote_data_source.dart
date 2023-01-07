@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:amar_bongo_app/data/models/user_model.dart';
 import 'package:amar_bongo_app/domain/entities/user.dart';
 // ignore: depend_on_referenced_packages
@@ -31,29 +33,27 @@ class FirebaseRemoteDatasourceImpl implements FirebaseRemoteDatasource {
   Future<UserEntity> getCurrentUser(String uid) async {
     final userCollection = firebaseFiresore.collection("users");
 
-    UserEntity? currentUser;
-    userCollection.doc(uid).get().then((value) {
-      if (value.exists) {
-        currentUser = UserEntity(
-          uid: value.get('uid'),
-          profileImage: value.get('profileImage'),
-          name: value.get('name'),
-          email: value.get('email'),
-          isOnline: value.get('isOnline'),
-          createdDate: value.get('createdDate'),
-        );
-      } else {
-        currentUser = const UserEntity(
-          uid: 'usernotavailable',
-          profileImage: 'usernotavailable',
-          name: 'usernotavailable',
-          email: 'usernotavailable',
-          isOnline: false,
-          createdDate: 'usernotavailable',
-        );
-      }
+    // ignore: null_argument_to_non_null_type
+    return userCollection.doc(uid).get().then((value) {
+      UserEntity? currentUser = const UserEntity(
+        uid: 'usernotavailable',
+        profileImage: 'usernotavailable',
+        name: 'usernotavailable',
+        email: 'usernotavailable',
+        isOnline: false,
+        createdDate: 'usernotavailable',
+      );
+
+      currentUser = UserEntity(
+        uid: value.get('uid'),
+        profileImage: value.get('profileImage'),
+        name: value.get('name'),
+        email: value.get('email'),
+        isOnline: value.get('isOnline'),
+        createdDate: value.get('createdDate'),
+      );
+      return currentUser;
     });
-    return currentUser!;
   }
 
   @override
@@ -63,32 +63,41 @@ class FirebaseRemoteDatasourceImpl implements FirebaseRemoteDatasource {
 
   @override
   Future<void> googleAuthentication() async {
-    // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await googleSignin.signIn();
+    final usersCollection = firebaseFiresore.collection("users");
 
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
-
-    if (googleAuth != null) {
-      // Create a new credential
-      final credential = GoogleAuthProvider.credential(
+    try {
+      final GoogleSignInAccount? account = await googleSignin.signIn();
+      final GoogleSignInAuthentication googleAuth =
+          await account!.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
-      firebaseAuth.signInWithCredential(credential).then((value) {
-        User? firebaseUser = firebaseAuth.currentUser;
-        int timestamp = DateTime.now().millisecondsSinceEpoch;
-        if (firebaseUser != null) {
-          final newUser = UserEntity(
-              uid: firebaseUser.uid,
-              name: firebaseUser.displayName,
-              email: firebaseUser.email,
-              isOnline: true,
-              createdDate: timestamp.toString());
-          createUser(newUser);
+      int timestamp = DateTime.now().millisecondsSinceEpoch;
+      final information =
+          (await firebaseAuth.signInWithCredential(credential)).user;
+      usersCollection
+          .doc(firebaseAuth.currentUser!.uid)
+          .get()
+          .then((user) async {
+        if (!user.exists) {
+          var uid = firebaseAuth.currentUser!.uid;
+          var newUser = UserModel(
+                  uid: information!.uid,
+                  name: information.displayName,
+                  email: information.email,
+                  profileImage: information.photoURL,
+                  isOnline: true,
+                  createdDate: timestamp.toString())
+              .toDocument();
+
+          usersCollection.doc(uid).set(newUser);
         }
-      });
+      }).whenComplete(() {
+        print("Successfull");
+      }).catchError((e) {});
+    } catch (e) {
+      print(e);
     }
   }
 

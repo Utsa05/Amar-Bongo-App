@@ -8,7 +8,7 @@ class UpdateUsecase {
     required this.firebaseRepositories,
   });
 
-  Future<void> updateUser(UserEntity user) {
+  Future<void> call(UserEntity user) {
     return firebaseRepositories.updateUser(user);
   }
 }
