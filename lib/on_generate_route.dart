@@ -1,7 +1,10 @@
 // ignore_for_file: unused_local_variable
 
+import 'package:amar_bongo_app/domain/entities/item.dart';
 import 'package:amar_bongo_app/presentation/constants/routes.dart';
 import 'package:amar_bongo_app/presentation/pages/bottom_nav/bottom.dart';
+import 'package:amar_bongo_app/presentation/pages/search/search.dart';
+import 'package:amar_bongo_app/presentation/pages/webview/webview.dart';
 
 import 'package:flutter/material.dart';
 
@@ -12,6 +15,15 @@ class AppRoute {
     switch (settings.name) {
       case RouteString.initial:
         return MaterialPageRoute(builder: (context) => const BottomNavPage());
+      case RouteString.search:
+        List<ItemEntity> itemList = arg as List<ItemEntity>;
+        return MaterialPageRoute(
+            builder: (context) => SearchPage(
+                  itemList: itemList,
+                ));
+      case RouteString.viewweb:
+        dynamic argu = arg as dynamic;
+        return MaterialPageRoute(builder: (context) => WebviewPage(url: argu));
       default:
         return screenRoute(screen: const ErrorPageRoute());
     }

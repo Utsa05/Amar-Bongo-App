@@ -1,4 +1,5 @@
 import 'package:amar_bongo_app/data/data_sources/remote_data_source.dart';
+import 'package:amar_bongo_app/domain/entities/item.dart';
 import 'package:amar_bongo_app/domain/entities/user.dart';
 import 'package:amar_bongo_app/domain/repositories/firebase_repositories.dart';
 
@@ -39,5 +40,10 @@ class FirebaseRepositoryImpl implements FirebaseRepositories {
   @override
   Future<void> createUser(UserEntity user) async {
     return remoteDatasource.createUser(user);
+  }
+
+  @override
+  Stream<List<ItemEntity>> getItems() {
+    return remoteDatasource.getItems();
   }
 }

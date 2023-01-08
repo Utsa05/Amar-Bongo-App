@@ -7,4 +7,5 @@ class RouteString {
   static const String favorite = "/favorite";
   static const String viewweb = "/viewweb";
   static const String notification = "/notification";
+  static const String search = "/search";
 }

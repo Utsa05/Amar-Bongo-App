@@ -13,5 +13,5 @@ class AppString {
   static const String health = "  Health  ";
   static const String shopping = "  Shopping  ";
   static const String eticket = "  E-Ticket  ";
-  static const String appN = "  Job  ";
+  static const String job = "  Job  ";
 }

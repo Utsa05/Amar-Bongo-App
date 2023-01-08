@@ -21,6 +21,7 @@ class FavoritePage extends StatelessWidget {
         elevation: 0.0,
       ),
       body: const ItemGridPage(
+        itemList: [],
         title: "title",
         isFavorite: true,
       ),

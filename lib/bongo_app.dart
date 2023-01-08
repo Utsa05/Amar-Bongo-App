@@ -4,6 +4,7 @@ import 'package:amar_bongo_app/on_generate_route.dart';
 import 'package:amar_bongo_app/presentation/constants/color.dart';
 import 'package:amar_bongo_app/presentation/constants/routes.dart';
 import 'package:amar_bongo_app/presentation/constants/string.dart';
+import 'package:amar_bongo_app/presentation/cubits/items/items_cubit.dart';
 import 'package:amar_bongo_app/presentation/cubits/user/user_cubit.dart';
 
 import 'package:flutter/material.dart';
@@ -43,6 +44,9 @@ class _BongoAppState extends State<BongoApp> {
         ),
         BlocProvider(
           create: (context) => di.sl<UserCubit>(),
+        ),
+        BlocProvider(
+          create: (context) => di.sl<ItemsCubit>()..getItems(),
         )
       ],
       child: MaterialApp(

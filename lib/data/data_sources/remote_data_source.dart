@@ -1,6 +1,8 @@
 // ignore_for_file: avoid_print
 
+import 'package:amar_bongo_app/data/models/item_model.dart';
 import 'package:amar_bongo_app/data/models/user_model.dart';
+import 'package:amar_bongo_app/domain/entities/item.dart';
 import 'package:amar_bongo_app/domain/entities/user.dart';
 // ignore: depend_on_referenced_packages
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,6 +19,7 @@ abstract class FirebaseRemoteDatasource {
   Future<UserEntity> getCurrentUser(String uid);
   Future<bool> isUserSignin();
   Future<void> createUser(UserEntity user);
+  Stream<List<ItemEntity>> getItems();
 }
 
 class FirebaseRemoteDatasourceImpl implements FirebaseRemoteDatasource {
@@ -150,5 +153,12 @@ class FirebaseRemoteDatasourceImpl implements FirebaseRemoteDatasource {
         userCollection.doc(uid).set(newUser);
       }
     });
+  }
+
+  @override
+  Stream<List<ItemEntity>> getItems() {
+    final collection = firebaseFiresore.collection("items");
+    return collection.snapshots().map(
+        (event) => event.docs.map((e) => ItemModel.fromSnapshot(e)).toList());
   }
 }

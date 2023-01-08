@@ -10,26 +10,12 @@ import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 
 class WebviewPage extends StatefulWidget {
-  const WebviewPage({super.key});
+  final dynamic url;
+  const WebviewPage({super.key, required this.url});
 
   @override
   State<WebviewPage> createState() => _WebviewPageState();
 }
-
-const String kNavigationExamplePage = '''
-<!DOCTYPE html><html>
-<head><title>Navigation Delegate Example</title></head>
-<body>
-<p>
-The navigation delegate is set to block navigation to the youtube website.
-</p>
-<ul>
-<ul><a href="https://www.youtube.com/">https://www.youtube.com/</a></ul>
-<ul><a href="https://www.google.com/">https://www.google.com/</a></ul>
-</ul>
-</body>
-</html>
-''';
 
 class _WebviewPageState extends State<WebviewPage> {
   late final WebViewController _controller;
@@ -70,23 +56,6 @@ class _WebviewPageState extends State<WebviewPage> {
               _isLoading = false;
             });
           },
-          onWebResourceError: (WebResourceError error) {
-            debugPrint('''
-Page resource error:
-  code: ${error.errorCode}
-  description: ${error.description}
-  errorType: ${error.errorType}
-  isForMainFrame: ${error.isForMainFrame}
-          ''');
-          },
-          onNavigationRequest: (NavigationRequest request) {
-            if (request.url.startsWith('https://www.youtube.com/')) {
-              debugPrint('blocking navigation to ${request.url}');
-              return NavigationDecision.prevent;
-            }
-            debugPrint('allowing navigation to ${request.url}');
-            return NavigationDecision.navigate;
-          },
         ),
       )
       ..addJavaScriptChannel(
@@ -97,7 +66,7 @@ Page resource error:
           );
         },
       )
-      ..loadRequest(Uri.parse('https://bangladesh.gov.bd'));
+      ..loadRequest(Uri.parse(widget.url['url']));
 
     // #docregion platform_features
     if (controller.platform is AndroidWebViewController) {
@@ -119,7 +88,7 @@ Page resource error:
           return false;
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('No back history item')),
+            const SnackBar(content: Text('Closed')),
           );
           return true;
         }
@@ -143,7 +112,7 @@ Page resource error:
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "Goverment",
+                widget.url['title'],
                 style: Theme.of(context).textTheme.headline6!.copyWith(
                     fontSize: 18.0, color: Theme.of(context).primaryColor),
               ),

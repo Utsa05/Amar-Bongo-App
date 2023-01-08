@@ -1,3 +1,4 @@
+import 'package:amar_bongo_app/domain/entities/item.dart';
 import 'package:amar_bongo_app/domain/entities/user.dart';
 
 abstract class FirebaseRepositories {
@@ -8,4 +9,5 @@ abstract class FirebaseRepositories {
   Future<String> getCurrentUserUID();
   Future<UserEntity> getCurrentUser(String uid);
   Future<bool> isUserSignin();
+  Stream<List<ItemEntity>> getItems();
 }

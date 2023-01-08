@@ -1,7 +1,10 @@
 // ignore_for_file: depend_on_referenced_packages
 
+import 'package:amar_bongo_app/domain/entities/item.dart';
 import 'package:amar_bongo_app/presentation/constants/color.dart';
+import 'package:amar_bongo_app/presentation/constants/routes.dart';
 import 'package:amar_bongo_app/presentation/constants/string.dart';
+import 'package:amar_bongo_app/presentation/cubits/items/items_cubit.dart';
 import 'package:amar_bongo_app/presentation/pages/home/subpages/health.dart';
 import 'package:amar_bongo_app/presentation/pages/home/subpages/home_sub.dart';
 import 'package:amar_bongo_app/presentation/pages/item_grid/item_grid.dart';
@@ -10,6 +13,7 @@ import 'package:amar_bongo_app/presentation/pages/search/search.dart';
 import 'package:flutter/material.dart';
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -19,46 +23,61 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: DefaultTabController(
-          length: 6,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              //appbar
-              const CustomAppbar(),
+          length: 7,
+          child: BlocBuilder<ItemsCubit, ItemsState>(
+            builder: (context, state) {
+              if (state is ItemsLoaded) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    //appbar
+                    CustomAppbar(
+                      itemList: state.itemList,
+                    ),
 
-              //tab
-              ButtonsTabBar(
-                  physics: const BouncingScrollPhysics(),
-                  backgroundColor: AppColor.goldenColor,
-                  unselectedBackgroundColor: AppColor.whiteColor,
-                  unselectedLabelStyle:
-                      GoogleFonts.openSans(color: Colors.black),
-                  labelStyle: GoogleFonts.openSans(
-                      color: Colors.white, fontWeight: FontWeight.bold),
-                  tabs: const [
-                    Tab(
-                      text: AppString.forYou,
-                    ),
-                    Tab(
-                      text: AppString.educaion,
-                    ),
-                    Tab(
-                      text: AppString.goverment,
-                    ),
-                    Tab(
-                      text: AppString.health,
-                    ),
-                    Tab(
-                      text: AppString.eticket,
-                    ),
-                    Tab(
-                      text: AppString.shopping,
-                    ),
-                  ]),
-              const Expanded(
-                child: Tabview(),
-              ),
-            ],
+                    //tab
+                    ButtonsTabBar(
+                        physics: const BouncingScrollPhysics(),
+                        backgroundColor: AppColor.goldenColor,
+                        unselectedBackgroundColor: AppColor.whiteColor,
+                        unselectedLabelStyle:
+                            GoogleFonts.openSans(color: Colors.black),
+                        labelStyle: GoogleFonts.openSans(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                        tabs: const [
+                          Tab(
+                            text: AppString.forYou,
+                          ),
+                          Tab(
+                            text: AppString.educaion,
+                          ),
+                          Tab(
+                            text: AppString.goverment,
+                          ),
+                          Tab(
+                            text: AppString.eticket,
+                          ),
+                          Tab(
+                            text: AppString.health,
+                          ),
+                          Tab(
+                            text: AppString.shopping,
+                          ),
+                          Tab(
+                            text: AppString.job,
+                          ),
+                        ]),
+                    Expanded(
+                        child: Tabview(
+                      itemList: state.itemList,
+                    )),
+                  ],
+                );
+              }
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            },
           ),
         ),
       ),
@@ -69,19 +88,41 @@ class HomePage extends StatelessWidget {
 class Tabview extends StatelessWidget {
   const Tabview({
     Key? key,
+    required this.itemList,
   }) : super(key: key);
+  final List<ItemEntity> itemList;
 
   @override
   Widget build(BuildContext context) {
-    return const TabBarView(
-      physics: NeverScrollableScrollPhysics(),
+    List<ItemEntity> getListbyCategory(
+        String category, List<ItemEntity> itemList) {
+      return itemList
+          .where(((item) =>
+              item.category!.toLowerCase() == category.toLowerCase()))
+          .toList();
+    }
+
+    List<ItemEntity> goverments = getListbyCategory('government', itemList);
+    List<ItemEntity> shoppings = getListbyCategory('shopping', itemList);
+    List<ItemEntity> educations = getListbyCategory('education', itemList);
+    List<ItemEntity> etickets = getListbyCategory('eticket', itemList);
+    List<ItemEntity> jobs = getListbyCategory('jobs', itemList);
+
+    return TabBarView(
+      physics: const NeverScrollableScrollPhysics(),
       children: <Widget>[
-        HomeSubPage(),
-        ItemGridPage(title: AppString.educaion),
-        ItemGridPage(title: AppString.goverment),
-        HealthPage(),
-        ItemGridPage(title: AppString.eticket),
-        ItemGridPage(title: AppString.shopping),
+        HomeSubPage(
+          itemList: itemList,
+        ),
+        ItemGridPage(
+          title: AppString.educaion,
+          itemList: educations,
+        ),
+        ItemGridPage(title: AppString.goverment, itemList: goverments),
+        ItemGridPage(title: AppString.eticket, itemList: etickets),
+        const HealthPage(),
+        ItemGridPage(title: AppString.shopping, itemList: shoppings),
+        ItemGridPage(title: AppString.job, itemList: jobs),
       ],
     );
   }
@@ -90,7 +131,9 @@ class Tabview extends StatelessWidget {
 class CustomAppbar extends StatelessWidget {
   const CustomAppbar({
     Key? key,
+    required this.itemList,
   }) : super(key: key);
+  final List<ItemEntity> itemList;
 
   @override
   Widget build(BuildContext context) {
@@ -136,10 +179,8 @@ class CustomAppbar extends StatelessWidget {
                   splashRadius: 25,
                   iconSize: 28.0,
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (builder) => const SearchPage()));
+                    Navigator.pushNamed(context, RouteString.search,
+                        arguments: itemList);
                   },
                   icon: const Icon(Icons.search_outlined))
             ],

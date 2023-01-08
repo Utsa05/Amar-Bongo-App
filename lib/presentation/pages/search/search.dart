@@ -1,14 +1,28 @@
+import 'package:amar_bongo_app/domain/entities/item.dart';
 import 'package:amar_bongo_app/presentation/constants/color.dart';
 import 'package:amar_bongo_app/presentation/pages/item_grid/item_grid.dart';
 import 'package:flutter/material.dart';
 
-class SearchPage extends StatelessWidget {
-  const SearchPage({super.key});
+class SearchPage extends StatefulWidget {
+  const SearchPage({super.key, required this.itemList});
+  final List<ItemEntity> itemList;
+
+  @override
+  State<SearchPage> createState() => _SearchPageState();
+}
+
+class _SearchPageState extends State<SearchPage> {
+  final TextEditingController searchController = TextEditingController();
+  List<ItemEntity> searchList = [];
+  bool isSearching = false;
+  @override
+  void initState() {
+    searchList = widget.itemList;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController searchController = TextEditingController();
-
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -38,6 +52,22 @@ class SearchPage extends StatelessWidget {
                       children: [
                         Expanded(
                           child: TextField(
+                            onChanged: (item) {
+                              if (item.isEmpty) {
+                                searchList = widget.itemList;
+                                isSearching = false;
+                              } else {
+                                searchList = searchList
+                                    .where((element) => element.title!
+                                        .toLowerCase()
+                                        .startsWith(item.toLowerCase()))
+                                    .toList();
+
+                                isSearching = true;
+                              }
+
+                              setState(() {});
+                            },
                             controller: searchController,
                             decoration: const InputDecoration(
                                 contentPadding:
@@ -47,19 +77,36 @@ class SearchPage extends StatelessWidget {
                                 hintText: "Search..."),
                           ),
                         ),
-                        Container(
-                          height: 42.0,
-                          alignment: Alignment.center,
-                          width: 42.0,
-                          decoration: const BoxDecoration(
-                              color: AppColor.primaryColor,
-                              borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(5),
-                                  bottomRight: Radius.circular(5.0))),
-                          child: const Icon(
-                            Icons.search_outlined,
-                            color: AppColor.whiteColor,
-                            size: 30.0,
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              searchController.clear();
+                              searchList = widget.itemList;
+                              isSearching = false;
+                            });
+                          },
+                          child: Container(
+                            height: 42.0,
+                            alignment: Alignment.center,
+                            width: 42.0,
+                            decoration: BoxDecoration(
+                                color: isSearching
+                                    ? AppColor.redColor
+                                    : AppColor.primaryColor,
+                                borderRadius: const BorderRadius.only(
+                                    topRight: Radius.circular(5),
+                                    bottomRight: Radius.circular(5.0))),
+                            child: isSearching == false
+                                ? const Icon(
+                                    Icons.search_outlined,
+                                    color: AppColor.whiteColor,
+                                    size: 30.0,
+                                  )
+                                : const Icon(
+                                    Icons.close,
+                                    color: AppColor.whiteColor,
+                                    size: 30.0,
+                                  ),
                           ),
                         )
                       ],
@@ -68,8 +115,9 @@ class SearchPage extends StatelessWidget {
                 ),
               ],
             ),
-            const Expanded(
+            Expanded(
               child: ItemGridPage(
+                itemList: searchList,
                 title: "title",
                 isFavorite: false,
               ),

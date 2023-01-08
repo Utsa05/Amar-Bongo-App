@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages
+// ignore_for_file: depend_on_referenced_packages, deprecated_member_use, no_leading_underscores_for_local_identifiers
 
 import 'package:amar_bongo_app/domain/entities/user.dart';
 import 'package:amar_bongo_app/presentation/constants/color.dart';
@@ -9,12 +9,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    _sendingMails() async {
+      const uri = 'mailto:nullit00@gmail.com?subject=Suggestion&body= ';
+      if (await canLaunch(uri)) {
+        await launch(uri);
+      } else {
+        throw 'Could not launch $uri';
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -31,20 +41,23 @@ class ProfilePage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 14.0),
         child: Column(
-          children: const [
-            ProfileTileView(),
+          children: [
+            const ProfileTileView(),
             Padding(
-              padding: EdgeInsets.only(top: 12.0),
+              padding: const EdgeInsets.only(top: 12.0),
               child: ItemWIdget(
+                tap: _sendingMails,
                 title: "Something",
                 icon: Icons.downhill_skiing,
               ),
             ),
             ItemWIdget(
+              tap: _sendingMails,
               title: "Contact Us",
               icon: Icons.email_outlined,
             ),
             ItemWIdget(
+              tap: _sendingMails,
               title: "Policy & Privacy",
               icon: Icons.privacy_tip_outlined,
             ),
@@ -241,9 +254,11 @@ class ItemWIdget extends StatelessWidget {
     Key? key,
     required this.icon,
     required this.title,
+    required this.tap,
   }) : super(key: key);
   final IconData icon;
   final String title;
+  final GestureTapCallback tap;
 
   @override
   Widget build(BuildContext context) {
@@ -251,7 +266,7 @@ class ItemWIdget extends StatelessWidget {
       trailing: const Icon(
         Icons.arrow_forward_ios,
       ),
-      onTap: () {},
+      onTap: tap,
       contentPadding: const EdgeInsets.all(0.0),
       leading: Container(
         height: 35.0,

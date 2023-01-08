@@ -1,59 +1,76 @@
+// ignore_for_file: depend_on_referenced_packages
+
+import 'package:amar_bongo_app/domain/entities/item.dart';
 import 'package:amar_bongo_app/presentation/constants/color.dart';
+import 'package:amar_bongo_app/presentation/constants/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class HomeSubPage extends StatelessWidget {
-  const HomeSubPage({Key? key}) : super(key: key);
+  const HomeSubPage({Key? key, required this.itemList}) : super(key: key);
+  final List<ItemEntity> itemList;
 
   @override
   Widget build(BuildContext context) {
-    var demolist = ['Result', 'Shopping', "Ticket", "Univarsity", 'Hospital'];
+    List<ItemEntity> getListbyCategory(
+        String category, List<ItemEntity> itemList) {
+      return itemList
+          .where(((item) =>
+              item.category!.toLowerCase() == category.toLowerCase()))
+          .toList();
+    }
+
+    List<ItemEntity> goverments = getListbyCategory('government', itemList);
+    List<ItemEntity> shoppings = getListbyCategory('shopping', itemList);
+    List<ItemEntity> educations = getListbyCategory('education', itemList);
+    List<ItemEntity> etickets = getListbyCategory('eticket', itemList);
+    List<ItemEntity> jobs = getListbyCategory('job', itemList);
     return Scaffold(
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.only(bottom: 20.0),
-        physics: const BouncingScrollPhysics(),
-        child: Column(
-          children: [
-            Itemrow(
-              demolist: demolist,
-              title: "Education",
-              tap: () {},
-            ),
-            Itemrow(
-              demolist: demolist,
-              title: "Goverment",
-              tap: () {},
-            ),
-            Itemrow(
-              demolist: demolist,
-              title: "Health",
-              tap: () {},
-            ),
-            Itemrow(
-              demolist: demolist,
-              title: "Shopping",
-              tap: () {},
-            ),
-            Itemrow(
-              demolist: demolist,
-              title: "Jobs",
-              tap: () {},
-            ),
-          ],
-        ),
+        body: SingleChildScrollView(
+      padding: const EdgeInsets.only(bottom: 20.0),
+      physics: const BouncingScrollPhysics(),
+      child: Column(
+        children: [
+          Itemrow(
+            itemList: educations,
+            title: "Education",
+            tap: () {},
+          ),
+          Itemrow(
+            itemList: goverments,
+            title: "Goverment",
+            tap: () {},
+          ),
+          Itemrow(
+            itemList: itemList,
+            title: "Health",
+            tap: () {},
+          ),
+          Itemrow(
+            itemList: shoppings,
+            title: "Shopping",
+            tap: () {},
+          ),
+          Itemrow(
+            itemList: jobs,
+            title: "Jobs",
+            tap: () {},
+          ),
+        ],
       ),
-    );
+    ));
   }
 }
 
 class Itemrow extends StatelessWidget {
   const Itemrow({
     Key? key,
-    required this.demolist,
+    required this.itemList,
     required this.title,
     required this.tap,
   }) : super(key: key);
 
-  final List<String> demolist;
+  final List<ItemEntity> itemList;
   final String title;
   final GestureTapCallback tap;
 
@@ -62,6 +79,7 @@ class Itemrow extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 20.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 14.0, right: 14.0),
@@ -96,34 +114,35 @@ class Itemrow extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             physics: const BouncingScrollPhysics(),
             child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: List.generate(
-                    demolist.length,
+                    itemList.length,
                     (index) => Stack(
                           children: [
                             Item(
-                              demolist: demolist,
+                              itemList: itemList,
                               index: index,
                             ),
-                            Positioned(
-                              right: 0.0,
-                              top: 0.0,
-                              child: MaterialButton(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(4)),
-                                padding: const EdgeInsets.all(0.0),
-                                minWidth: 27.0,
-                                height: 27.0,
-                                onPressed: () {},
-                                color: Theme.of(context)
-                                    .primaryColor
-                                    .withOpacity(0.5),
-                                child: const Icon(
-                                  Icons.favorite_outline,
-                                  size: 20.0,
-                                  color: AppColor.whiteColor,
-                                ),
-                              ),
-                            )
+                            // Positioned(
+                            //   right: 0.0,
+                            //   top: 0.0,
+                            //   child: MaterialButton(
+                            //     shape: RoundedRectangleBorder(
+                            //         borderRadius: BorderRadius.circular(4)),
+                            //     padding: const EdgeInsets.all(0.0),
+                            //     minWidth: 27.0,
+                            //     height: 27.0,
+                            //     onPressed: () {},
+                            //     color: Theme.of(context)
+                            //         .primaryColor
+                            //         .withOpacity(0.3),
+                            //     child: const Icon(
+                            //       Icons.favorite_outline,
+                            //       size: 20.0,
+                            //       color: AppColor.whiteColor,
+                            //     ),
+                            //   ),
+                            // )
                           ],
                         ))),
           ),
@@ -136,11 +155,11 @@ class Itemrow extends StatelessWidget {
 class Item extends StatelessWidget {
   const Item({
     Key? key,
-    required this.demolist,
+    required this.itemList,
     required this.index,
   }) : super(key: key);
 
-  final List<String> demolist;
+  final List<ItemEntity> itemList;
   final int index;
 
   @override
@@ -149,31 +168,77 @@ class Item extends StatelessWidget {
       padding: const EdgeInsets.only(left: 16.0),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8.0),
-        child: MaterialButton(
-          padding: const EdgeInsets.all(14.0),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-          color: AppColor.whiteColor,
-          elevation: 0.0,
-          onPressed: () {},
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const FlutterLogo(
-                size: 70,
-              ),
-              const SizedBox(
-                height: 10.0,
-              ),
-              Text(
-                demolist[index],
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText2!
-                    .copyWith(color: AppColor.blackColor),
-              )
-            ],
+        child: SizedBox(
+          height: 130.0,
+          child: MaterialButton(
+            padding:
+                const EdgeInsets.symmetric(vertical: 10.0, horizontal: 8.0),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0)),
+            color: AppColor.whiteColor,
+            elevation: 0.0,
+            onPressed: () {
+              Navigator.pushNamed(context, RouteString.viewweb, arguments: {
+                "url": itemList[index].url,
+                "title": itemList[index].title
+              });
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                itemList[index].image == null
+                    ? Container(
+                        width: 78.0,
+                        height: 60.0,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: AppColor.blackColor.withOpacity(0.03),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: Icon(
+                          Icons.photo_outlined,
+                          color: AppColor.blackColor.withOpacity(0.4),
+                          size: 35.0,
+                        ),
+                      )
+                    : CachedNetworkImage(
+                        imageUrl: itemList[index].image!,
+                        imageBuilder: (context, imageProvider) => Container(
+                          width: 78.0,
+                          height: 60.0,
+                          decoration: BoxDecoration(
+                            color: AppColor.blackColor.withOpacity(0.03),
+                            borderRadius: BorderRadius.circular(10.0),
+                            image: DecorationImage(
+                              image: imageProvider,
+                            ),
+                          ),
+                        ),
+                        placeholder: (context, url) =>
+                            const CircularProgressIndicator(),
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
+                      ),
+                const SizedBox(
+                  height: 8.0,
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  width: 85.0,
+                  child: Text(
+                    itemList[index].title!,
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText2!
+                        .copyWith(color: AppColor.blackColor, fontSize: 13.0),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
