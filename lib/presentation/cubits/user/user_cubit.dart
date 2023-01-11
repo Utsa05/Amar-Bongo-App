@@ -24,7 +24,7 @@ class UserCubit extends Cubit<UserState> {
 
       emit(UserIsLoaded(user: user));
     } on SocketException {
-      emit(UserIsFailure());
+      emit(UserIsNoInternet());
     } catch (e) {
       print("user failur");
       print(e);

@@ -7,6 +7,8 @@ class UserInitial extends UserState {}
 
 class UserIsLoading extends UserState {}
 
+class UserIsNoInternet extends UserState {}
+
 class UserIsLoaded extends UserState {
   final UserEntity user;
 

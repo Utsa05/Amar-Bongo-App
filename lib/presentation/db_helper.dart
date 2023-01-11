@@ -1,5 +1,6 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:amar_bongo_app/data/models/item_model.dart';
-import 'package:amar_bongo_app/domain/entities/item.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 

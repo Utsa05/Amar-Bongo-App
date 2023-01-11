@@ -9,6 +9,8 @@ class AppinfoLoading extends AppinfoState {}
 
 class Appinfofailure extends AppinfoState {}
 
+class AppinfoNoInternet extends AppinfoState {}
+
 class AppinfoLoaded extends AppinfoState {
   final AppInfoModel appInfoModel;
 

@@ -1,9 +1,25 @@
+import 'dart:async';
+
 import 'package:amar_bongo_app/presentation/constants/color.dart';
+import 'package:amar_bongo_app/presentation/constants/routes.dart';
 import 'package:amar_bongo_app/presentation/constants/string.dart';
 import 'package:flutter/material.dart';
 
-class SplashPage extends StatelessWidget {
+class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);
+
+  @override
+  State<SplashPage> createState() => _SplashPageState();
+}
+
+class _SplashPageState extends State<SplashPage> {
+  @override
+  void initState() {
+    Timer.periodic(const Duration(seconds: 3), (timer) {
+      Navigator.pushNamed(context, RouteString.home);
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

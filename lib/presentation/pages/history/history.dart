@@ -1,5 +1,6 @@
 import 'package:amar_bongo_app/presentation/constants/color.dart';
 import 'package:flutter/material.dart';
+// ignore: depend_on_referenced_packages
 import 'package:webview_flutter/webview_flutter.dart';
 
 class HistoryPage extends StatefulWidget {

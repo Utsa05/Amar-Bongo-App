@@ -21,7 +21,7 @@ class CredentialCubit extends Cubit<CredentialState> {
 
       emit(CredentialSuccess());
     } on SocketException catch (_) {
-      emit(CredentialFailure());
+      emit(CredentialNoInternet());
     } catch (_) {
       emit(CredentialFailure());
     }

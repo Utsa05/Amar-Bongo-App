@@ -2,6 +2,7 @@ import 'package:amar_bongo_app/domain/entities/item.dart';
 import 'package:amar_bongo_app/presentation/constants/color.dart';
 import 'package:amar_bongo_app/presentation/constants/routes.dart';
 import 'package:flutter/material.dart';
+// ignore: depend_on_referenced_packages
 import 'package:cached_network_image/cached_network_image.dart';
 
 class HealthPage extends StatefulWidget {
@@ -27,7 +28,7 @@ class _HealthPageState extends State<HealthPage> {
 
   @override
   Widget build(BuildContext context) {
-    String dropdownValue = 'Type';
+    String dropdownValue = 'All';
 
     return Scaffold(
       body: Column(
@@ -165,9 +166,7 @@ class _HealthPageState extends State<HealthPage> {
                       setState(() {});
                     },
                     items: <String>[
-                      "Type",
                       'All',
-                      "demo",
                       'Online',
                       'Hospital',
                       'Blood Bank',
@@ -303,15 +302,19 @@ class _HealthPageState extends State<HealthPage> {
             height: 16.0,
           ),
           Expanded(
-              child: ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: searchList.length,
-                  itemBuilder: (context, index) {
-                    return HealthItem(
-                      searchList: searchList,
-                      index: index,
-                    );
-                  }))
+              child: searchList.isNotEmpty
+                  ? ListView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      itemCount: searchList.length,
+                      itemBuilder: (context, index) {
+                        return HealthItem(
+                          searchList: searchList,
+                          index: index,
+                        );
+                      })
+                  : const Center(
+                      child: Text("No Item"),
+                    ))
         ],
       ),
     );

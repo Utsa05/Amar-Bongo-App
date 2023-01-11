@@ -23,7 +23,7 @@ class ItemsCubit extends Cubit<ItemsState> {
     });
 
     try {} on SocketException {
-      emit(ItemsFailuare());
+      emit(ItemsNoInternet());
     } catch (e) {
       emit(ItemsFailuare());
     }

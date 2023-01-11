@@ -1,5 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages, avoid_print
 
+import 'dart:io';
+
 import 'package:amar_bongo_app/domain/usecases/getcurrent_user_id_usecase.dart';
 import 'package:amar_bongo_app/domain/usecases/issignin_usecase.dart';
 import 'package:amar_bongo_app/domain/usecases/signout_usecase.dart';
@@ -39,6 +41,8 @@ class AuthCubit extends Cubit<AuthState> {
 
       print("user Id $uid");
       emit(Authenticated(uid: uid));
+    } on SocketException {
+      emit(AuthNoInternet());
     } catch (_) {
       print("user Id null");
       emit(UnAuthenticated());
@@ -49,6 +53,8 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       await signoutUsecase.call();
       emit(UnAuthenticated());
+    } on SocketException {
+      emit(AuthNoInternet());
     } catch (_) {
       emit(UnAuthenticated());
     }

@@ -4,6 +4,7 @@ import 'package:amar_bongo_app/domain/entities/item.dart';
 import 'package:amar_bongo_app/presentation/constants/routes.dart';
 import 'package:amar_bongo_app/presentation/pages/bottom_nav/bottom.dart';
 import 'package:amar_bongo_app/presentation/pages/search/search.dart';
+import 'package:amar_bongo_app/presentation/pages/splash/splash.dart';
 import 'package:amar_bongo_app/presentation/pages/webview/webview.dart';
 
 import 'package:flutter/material.dart';
@@ -14,6 +15,8 @@ class AppRoute {
 
     switch (settings.name) {
       case RouteString.initial:
+        return MaterialPageRoute(builder: (context) => const SplashPage());
+      case RouteString.home:
         return MaterialPageRoute(builder: (context) => const BottomNavPage());
       case RouteString.search:
         List<ItemEntity> itemList = arg as List<ItemEntity>;

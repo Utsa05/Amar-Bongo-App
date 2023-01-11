@@ -14,3 +14,5 @@ class ItemsLoaded extends ItemsState {
 }
 
 class ItemsFailuare extends ItemsState {}
+
+class ItemsNoInternet extends ItemsState {}

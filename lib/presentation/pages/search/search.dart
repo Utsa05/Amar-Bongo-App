@@ -116,11 +116,15 @@ class _SearchPageState extends State<SearchPage> {
               ],
             ),
             Expanded(
-              child: ItemGridPage(
-                itemList: searchList,
-                title: "title",
-                isFavorite: false,
-              ),
+              child: searchList.isNotEmpty
+                  ? ItemGridPage(
+                      itemList: searchList,
+                      title: "title",
+                      isFavorite: false,
+                    )
+                  : const Center(
+                      child: Text("No Item"),
+                    ),
             ),
           ],
         ),

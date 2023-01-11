@@ -10,3 +10,5 @@ class CredentialLoading extends CredentialState {}
 class CredentialSuccess extends CredentialState {}
 
 class CredentialFailure extends CredentialState {}
+
+class CredentialNoInternet extends CredentialState {}

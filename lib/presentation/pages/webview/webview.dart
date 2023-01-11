@@ -6,7 +6,7 @@ import 'package:amar_bongo_app/presentation/constants/color.dart';
 import 'package:amar_bongo_app/presentation/db_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-//import 'package:share_plus/share_plus.dart';
+import 'package:share_plus/share_plus.dart';
 
 // #docregion platform_imports
 // Import for Android features.
@@ -36,11 +36,9 @@ class _WebviewPageState extends State<WebviewPage> {
     favoriteList = await dbHelper.fetchList().whenComplete(() {
       setState(() {
         isFething = false;
-        print("Congress Feched");
       });
     });
 
-    print(favoriteList.length);
     // print(widget.itemEntity.title);
 
     for (var element in favoriteList) {
@@ -211,8 +209,9 @@ class _WebviewPageState extends State<WebviewPage> {
                     splashRadius: 25,
                     iconSize: 28.0,
                     onPressed: () {
-                      // Share.share('Share From Bongo App at ${widget.url}',
-                      //     subject: "Share Now");
+                      Share.share(
+                          'Share From Amar Bongo App\nurl:${_controller.currentUrl()}',
+                          subject: widget.itemEntity.title);
                       // Navigator.push(
                       //     context,
                       //     MaterialPageRoute(

@@ -6,11 +6,13 @@ import 'package:amar_bongo_app/presentation/cubits/appinfo/appinfo_cubit.dart';
 import 'package:amar_bongo_app/presentation/cubits/auth/auth_cubit.dart';
 import 'package:amar_bongo_app/presentation/cubits/credential/credential_cubit.dart';
 import 'package:amar_bongo_app/presentation/cubits/user/user_cubit.dart';
+import 'package:amar_bongo_app/presentation/pages/nointernet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -62,7 +64,9 @@ class ProfilePage extends StatelessWidget {
                       ),
                       ItemWIdget(
                         tap: () {
-                          _sendingMails(state.appInfoModel.shareapp!);
+                          Share.share(
+                              'This is Amar Bongo App\nDownload link:${state.appInfoModel.shareapp}',
+                              subject: "Share Now");
                         },
                         title: "Share App",
                         icon: Icons.share,
@@ -89,8 +93,11 @@ class ProfilePage extends StatelessWidget {
                     child: CircularProgressIndicator(),
                   );
                 }
+                if (state is AppinfoNoInternet) {
+                  return const NoInteret();
+                }
                 return const Center(
-                  child: Text('Failur'),
+                  child: Text('Something Wrong'),
                 );
               },
             )
@@ -188,8 +195,12 @@ class ProfileTileView extends StatelessWidget {
                 );
               }
 
+              if (state is AuthNoInternet) {
+                return const NoInteret();
+              }
+
               return const Center(
-                child: Text("User Loaded Failure"),
+                child: Text("Something Worong"),
               );
             },
           );

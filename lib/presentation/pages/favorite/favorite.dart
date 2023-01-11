@@ -1,9 +1,10 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:amar_bongo_app/data/models/item_model.dart';
 import 'package:amar_bongo_app/domain/entities/item.dart';
 import 'package:amar_bongo_app/presentation/constants/color.dart';
 import 'package:amar_bongo_app/presentation/constants/routes.dart';
 import 'package:amar_bongo_app/presentation/db_helper.dart';
-import 'package:amar_bongo_app/presentation/pages/item_grid/item_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -26,9 +27,6 @@ class _FavoritePageState extends State<FavoritePage> {
         if (isFething == false) {}
       });
     });
-
-    print("Congress Feched");
-    print(favoriteList.length);
   }
 
   @override

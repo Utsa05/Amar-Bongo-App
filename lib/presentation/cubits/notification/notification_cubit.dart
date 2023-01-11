@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, avoid_print
+// ignore_for_file: public_member_api_docs, sort_constructors_first, avoid_print, depend_on_referenced_packages
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
@@ -25,7 +25,7 @@ class NotificationCubit extends Cubit<NotificationState> {
         emit(NotificationLoaded(notificationList: notificationList));
       });
     } on SocketException {
-      emit(NotificationFailure());
+      emit(NotificationNoInternet());
     } catch (e) {
       emit(NotificationFailure());
       print(e);

@@ -9,6 +9,7 @@ import 'package:amar_bongo_app/presentation/cubits/items/items_cubit.dart';
 import 'package:amar_bongo_app/presentation/pages/home/subpages/health.dart';
 import 'package:amar_bongo_app/presentation/pages/home/subpages/home_sub.dart';
 import 'package:amar_bongo_app/presentation/pages/item_grid/item_grid.dart';
+import 'package:amar_bongo_app/presentation/pages/nointernet.dart';
 import 'package:amar_bongo_app/presentation/pages/notification/notiification.dart';
 import 'package:amar_bongo_app/presentation/pages/push_notification/badge.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +44,7 @@ class _HomePageState extends State<HomePage> {
     );
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      // ignore: avoid_print
       print('User granted permission');
 
       // // For handling the received notifications
@@ -68,11 +70,12 @@ class _HomePageState extends State<HomePage> {
             leading: NotificationBadge(totalNotifications: _totalNotifications),
             subtitle: Text(_notificationInfo!.body!),
             background: Colors.cyan.shade700,
-            duration: Duration(seconds: 5),
+            duration: const Duration(seconds: 5),
           );
         }
       });
     } else {
+      // ignore: avoid_print
       print('User declined or has not accepted permission');
     }
   }
@@ -138,6 +141,10 @@ class _HomePageState extends State<HomePage> {
                     )),
                   ],
                 );
+              }
+
+              if (state is ItemsNoInternet) {
+                return const NoInteret();
               }
               return const Center(
                 child: CircularProgressIndicator(),
