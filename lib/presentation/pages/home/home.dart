@@ -1,5 +1,6 @@
 // ignore_for_file: depend_on_referenced_packages
 
+import 'package:amar_bongo_app/data/models/push_noti_model.dart';
 import 'package:amar_bongo_app/domain/entities/item.dart';
 import 'package:amar_bongo_app/presentation/constants/color.dart';
 import 'package:amar_bongo_app/presentation/constants/routes.dart';
@@ -9,14 +10,78 @@ import 'package:amar_bongo_app/presentation/pages/home/subpages/health.dart';
 import 'package:amar_bongo_app/presentation/pages/home/subpages/home_sub.dart';
 import 'package:amar_bongo_app/presentation/pages/item_grid/item_grid.dart';
 import 'package:amar_bongo_app/presentation/pages/notification/notiification.dart';
-import 'package:amar_bongo_app/presentation/pages/search/search.dart';
+import 'package:amar_bongo_app/presentation/pages/push_notification/badge.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  late final FirebaseMessaging _messaging;
+  late int _totalNotifications;
+  PushNotification? _notificationInfo;
+
+  void registerNotification() async {
+    // 2. Instantiate Firebase Messaging
+    _messaging = FirebaseMessaging.instance;
+
+    // 3. On iOS, this helps to take the user permissions
+    NotificationSettings settings = await _messaging.requestPermission(
+      alert: true,
+      badge: true,
+      provisional: false,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
+
+      // // For handling the received notifications
+      // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      //   // Parse the message received
+      //   PushNotification notification = PushNotification(
+      //     title: message.notification?.title,
+      //     body: message.notification?.body,
+      //   );
+
+      //   setState(() {
+      //     _notificationInfo = notification;
+      //     _totalNotifications++;
+      //   });
+      // });
+
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        // ...
+        if (_notificationInfo != null) {
+          // For displaying the notification as an overlay
+          showSimpleNotification(
+            Text(_notificationInfo!.title!),
+            leading: NotificationBadge(totalNotifications: _totalNotifications),
+            subtitle: Text(_notificationInfo!.body!),
+            background: Colors.cyan.shade700,
+            duration: Duration(seconds: 5),
+          );
+        }
+      });
+    } else {
+      print('User declined or has not accepted permission');
+    }
+  }
+
+  @override
+  void initState() {
+    registerNotification();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,16 +114,16 @@ class HomePage extends StatelessWidget {
                             text: AppString.forYou,
                           ),
                           Tab(
-                            text: AppString.educaion,
-                          ),
-                          Tab(
-                            text: AppString.goverment,
+                            text: AppString.health,
                           ),
                           Tab(
                             text: AppString.eticket,
                           ),
                           Tab(
-                            text: AppString.health,
+                            text: AppString.educaion,
+                          ),
+                          Tab(
+                            text: AppString.goverment,
                           ),
                           Tab(
                             text: AppString.shopping,
@@ -85,7 +150,7 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class Tabview extends StatelessWidget {
+class Tabview extends StatefulWidget {
   const Tabview({
     Key? key,
     required this.itemList,
@@ -93,34 +158,139 @@ class Tabview extends StatelessWidget {
   final List<ItemEntity> itemList;
 
   @override
+  State<Tabview> createState() => _TabviewState();
+}
+
+class _TabviewState extends State<Tabview> {
+  String dropdownValue = "All";
+  List<ItemEntity> searchList = [];
+  bool isCategoryTap = false;
+  List<ItemEntity> getListbyCategory(
+      String category, List<ItemEntity> itemList) {
+    return itemList
+        .where(
+            ((item) => item.category!.toLowerCase() == category.toLowerCase()))
+        .toList();
+  }
+
+  List<ItemEntity> goverments = [];
+  List<ItemEntity> shoppings = [];
+  List<ItemEntity> educations = [];
+  List<ItemEntity> etickets = [];
+  List<ItemEntity> railway = [];
+  List<ItemEntity> carRental = [];
+  List<ItemEntity> bus = [];
+  List<ItemEntity> air = [];
+  List<ItemEntity> hotelBooking = [];
+  List<ItemEntity> healths = [];
+  List<ItemEntity> jobs = [];
+
+  getAllItem() {
+    goverments = getListbyCategory('government', widget.itemList);
+    shoppings = getListbyCategory('shopping', widget.itemList);
+    educations = getListbyCategory('education', widget.itemList);
+
+    railway = getListbyCategory('railway', widget.itemList);
+    carRental = getListbyCategory('car rental', widget.itemList);
+    bus = getListbyCategory('bus', widget.itemList);
+    air = getListbyCategory('air', widget.itemList);
+    hotelBooking = getListbyCategory('hotel booking', widget.itemList);
+    etickets.addAll(bus);
+    etickets.addAll(air);
+    etickets.addAll(railway);
+    etickets.addAll(carRental);
+    etickets.addAll(hotelBooking);
+    searchList = etickets;
+    jobs = getListbyCategory('jobs', widget.itemList);
+    healths = getListbyCategory('health', widget.itemList);
+  }
+
+  @override
+  void initState() {
+    getAllItem();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    List<ItemEntity> getListbyCategory(
-        String category, List<ItemEntity> itemList) {
-      return itemList
-          .where(((item) =>
-              item.category!.toLowerCase() == category.toLowerCase()))
-          .toList();
-    }
-
-    List<ItemEntity> goverments = getListbyCategory('government', itemList);
-    List<ItemEntity> shoppings = getListbyCategory('shopping', itemList);
-    List<ItemEntity> educations = getListbyCategory('education', itemList);
-    List<ItemEntity> etickets = getListbyCategory('eticket', itemList);
-    List<ItemEntity> jobs = getListbyCategory('jobs', itemList);
-
     return TabBarView(
       physics: const NeverScrollableScrollPhysics(),
       children: <Widget>[
         HomeSubPage(
-          itemList: itemList,
+          itemList: widget.itemList,
+        ),
+        HealthPage(itemList: healths),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(
+              height: 10.0,
+            ),
+            SizedBox(
+              width: 180.0,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
+                child: DropdownButtonFormField(
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    filled: true,
+                    fillColor: AppColor.whiteColor,
+                  ),
+                  value: dropdownValue,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      dropdownValue = newValue!;
+                    });
+
+                    if (newValue!.toLowerCase() == "all") {
+                      searchList = etickets;
+                    } else {
+                      if (isCategoryTap) {
+                        searchList = etickets
+                            .where((element) => element.category!
+                                .toLowerCase()
+                                .startsWith(newValue.toLowerCase()))
+                            .toList();
+                      } else {
+                        searchList = searchList
+                            .where((element) => element.category!
+                                .toLowerCase()
+                                .startsWith(newValue.toLowerCase()))
+                            .toList();
+                      }
+                    }
+                    isCategoryTap = true;
+                    setState(() {});
+                  },
+                  items: <String>[
+                    'All',
+                    'Air',
+                    "Bus",
+                    'Railway',
+                    'Car Rental',
+                    'Hotel Booking'
+                  ].map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(
+                        value,
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ),
+            Expanded(
+                child: ItemGridPage(
+                    title: AppString.eticket, itemList: searchList)),
+          ],
         ),
         ItemGridPage(
           title: AppString.educaion,
           itemList: educations,
         ),
         ItemGridPage(title: AppString.goverment, itemList: goverments),
-        ItemGridPage(title: AppString.eticket, itemList: etickets),
-        const HealthPage(),
         ItemGridPage(title: AppString.shopping, itemList: shoppings),
         ItemGridPage(title: AppString.job, itemList: jobs),
       ],

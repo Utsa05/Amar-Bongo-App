@@ -2,6 +2,7 @@
 
 import 'package:amar_bongo_app/domain/entities/user.dart';
 import 'package:amar_bongo_app/presentation/constants/color.dart';
+import 'package:amar_bongo_app/presentation/cubits/appinfo/appinfo_cubit.dart';
 import 'package:amar_bongo_app/presentation/cubits/auth/auth_cubit.dart';
 import 'package:amar_bongo_app/presentation/cubits/credential/credential_cubit.dart';
 import 'package:amar_bongo_app/presentation/cubits/user/user_cubit.dart';
@@ -16,8 +17,7 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _sendingMails() async {
-      const uri = 'mailto:nullit00@gmail.com?subject=Suggestion&body= ';
+    _sendingMails(String uri) async {
       if (await canLaunch(uri)) {
         await launch(uri);
       } else {
@@ -43,24 +43,57 @@ class ProfilePage extends StatelessWidget {
         child: Column(
           children: [
             const ProfileTileView(),
-            Padding(
-              padding: const EdgeInsets.only(top: 12.0),
-              child: ItemWIdget(
-                tap: _sendingMails,
-                title: "Something",
-                icon: Icons.downhill_skiing,
-              ),
-            ),
-            ItemWIdget(
-              tap: _sendingMails,
-              title: "Contact Us",
-              icon: Icons.email_outlined,
-            ),
-            ItemWIdget(
-              tap: _sendingMails,
-              title: "Policy & Privacy",
-              icon: Icons.privacy_tip_outlined,
-            ),
+            BlocBuilder<AppinfoCubit, AppinfoState>(
+              builder: (context, state) {
+                if (state is AppinfoLoaded) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 12.0),
+                        child: ItemWIdget(
+                          tap: () {
+                            _sendingMails(
+                                "'mailto:nullit00@gmail.com?subject=Suggestion&body= '");
+                          },
+                          title: "Contact Us",
+                          icon: Icons.email_outlined,
+                        ),
+                      ),
+                      ItemWIdget(
+                        tap: () {
+                          _sendingMails(state.appInfoModel.shareapp!);
+                        },
+                        title: "Share App",
+                        icon: Icons.share,
+                      ),
+                      ItemWIdget(
+                        tap: () {
+                          _sendingMails(state.appInfoModel.policy!);
+                        },
+                        title: "Policy & Privacy",
+                        icon: Icons.privacy_tip_outlined,
+                      ),
+                      ItemWIdget(
+                        tap: () {
+                          _sendingMails(state.appInfoModel.othersapp!);
+                        },
+                        title: "More App",
+                        icon: Icons.more_horiz_outlined,
+                      ),
+                    ],
+                  );
+                }
+                if (state is AppinfoLoading) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                return const Center(
+                  child: Text('Failur'),
+                );
+              },
+            )
           ],
         ),
       ),

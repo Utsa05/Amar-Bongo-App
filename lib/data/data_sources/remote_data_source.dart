@@ -1,8 +1,12 @@
 // ignore_for_file: avoid_print
 
+import 'package:amar_bongo_app/data/models/appinfo_model.dart';
 import 'package:amar_bongo_app/data/models/item_model.dart';
+import 'package:amar_bongo_app/data/models/notification_model.dart';
 import 'package:amar_bongo_app/data/models/user_model.dart';
 import 'package:amar_bongo_app/domain/entities/item.dart';
+
+import 'package:amar_bongo_app/domain/entities/notification.dart';
 import 'package:amar_bongo_app/domain/entities/user.dart';
 // ignore: depend_on_referenced_packages
 import 'package:firebase_auth/firebase_auth.dart';
@@ -20,6 +24,8 @@ abstract class FirebaseRemoteDatasource {
   Future<bool> isUserSignin();
   Future<void> createUser(UserEntity user);
   Stream<List<ItemEntity>> getItems();
+  Stream<List<NotificationEntity>> getNotifications();
+  Future<AppInfoModel> getAppInfo();
 }
 
 class FirebaseRemoteDatasourceImpl implements FirebaseRemoteDatasource {
@@ -158,7 +164,52 @@ class FirebaseRemoteDatasourceImpl implements FirebaseRemoteDatasource {
   @override
   Stream<List<ItemEntity>> getItems() {
     final collection = firebaseFiresore.collection("items");
-    return collection.snapshots().map(
-        (event) => event.docs.map((e) => ItemModel.fromSnapshot(e)).toList());
+
+    return collection
+        .orderBy('title')
+        .snapshots()
+        .map((event) => event.docs.map((e) {
+              print(e.get('title') ?? "empty");
+              print(e.get('address') ?? "empty");
+              return ItemModel.fromSnapshot(e);
+            }).toList());
+  }
+
+  @override
+  Stream<List<NotificationEntity>> getNotifications() {
+    final collection = firebaseFiresore.collection("notifications");
+    return collection.snapshots().map((event) =>
+        event.docs.map((e) => NotificationModel.fromSnapshot(e)).toList());
+  }
+
+  @override
+  Future<AppInfoModel> getAppInfo() async {
+    final collection =
+        firebaseFiresore.collection("appinfo").doc('WTmNxTYT7WDpzsTcijIX');
+
+    return collection.get().then((value) {
+      if (value.exists) {
+        print(value.get('addstatus'));
+        return AppInfoModel(
+          addstatus: value.get('addstatus'),
+          shareapp: value.get('shareapp'),
+          othersapp: value.get('othersapp'),
+          bannerad: value.get('bannerad'),
+          interstitialad: value.get('interstitialad'),
+          videoad: value.get('videoad'),
+          policy: value.get('policy'),
+        );
+      } else {
+        print('app info not exist');
+        return const AppInfoModel(
+          addstatus: 'nothing',
+          bannerad: 'nothing',
+          videoad: 'nothing',
+          interstitialad: 'nothing',
+          shareapp: 'nothing',
+          othersapp: 'nothing',
+        );
+      }
+    });
   }
 }

@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages
+// ignore_for_file: depend_on_referenced_packages, avoid_print
 
 import 'dart:io';
 
@@ -19,7 +19,6 @@ class ItemsCubit extends Cubit<ItemsState> {
 
     final stramResponse = getItemsUsecase.call();
     stramResponse.listen((itemList) {
-      print(itemList[1].category);
       emit(ItemsLoaded(itemList: itemList));
     });
 

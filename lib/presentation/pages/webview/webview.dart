@@ -1,8 +1,13 @@
 // ignore_for_file: depend_on_referenced_packages
 
+import 'package:amar_bongo_app/data/models/item_model.dart';
+import 'package:amar_bongo_app/domain/entities/item.dart';
 import 'package:amar_bongo_app/presentation/constants/color.dart';
+import 'package:amar_bongo_app/presentation/db_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+//import 'package:share_plus/share_plus.dart';
+
 // #docregion platform_imports
 // Import for Android features.
 import 'package:webview_flutter_android/webview_flutter_android.dart';
@@ -10,8 +15,8 @@ import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 
 class WebviewPage extends StatefulWidget {
-  final dynamic url;
-  const WebviewPage({super.key, required this.url});
+  final ItemEntity itemEntity;
+  const WebviewPage({super.key, required this.itemEntity});
 
   @override
   State<WebviewPage> createState() => _WebviewPageState();
@@ -19,11 +24,41 @@ class WebviewPage extends StatefulWidget {
 
 class _WebviewPageState extends State<WebviewPage> {
   late final WebViewController _controller;
+  bool isFething = true;
+  List<ItemFavModel> favoriteList = [];
+  late DBHelper dbHelper;
+
   bool _isLoading = true;
+
+  bool isAlreadyFav = false;
+
+  fetch() async {
+    favoriteList = await dbHelper.fetchList().whenComplete(() {
+      setState(() {
+        isFething = false;
+        print("Congress Feched");
+      });
+    });
+
+    print(favoriteList.length);
+    // print(widget.itemEntity.title);
+
+    for (var element in favoriteList) {
+      if (element.title!.toLowerCase() ==
+          widget.itemEntity.title!.toLowerCase()) {
+        isAlreadyFav = true;
+        break;
+      } else {
+        isAlreadyFav = false;
+      }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-
+    dbHelper = DBHelper();
+    fetch();
     // #docregion platform_features
     late final PlatformWebViewControllerCreationParams params;
     if (WebViewPlatform.instance is WebKitWebViewPlatform) {
@@ -66,7 +101,7 @@ class _WebviewPageState extends State<WebviewPage> {
           );
         },
       )
-      ..loadRequest(Uri.parse(widget.url['url']));
+      ..loadRequest(Uri.parse(widget.itemEntity.url!));
 
     // #docregion platform_features
     if (controller.platform is AndroidWebViewController) {
@@ -111,10 +146,12 @@ class _WebviewPageState extends State<WebviewPage> {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                widget.url['title'],
-                style: Theme.of(context).textTheme.headline6!.copyWith(
-                    fontSize: 18.0, color: Theme.of(context).primaryColor),
+              Expanded(
+                child: Text(
+                  widget.itemEntity.title!,
+                  style: Theme.of(context).textTheme.headline6!.copyWith(
+                      fontSize: 18.0, color: Theme.of(context).primaryColor),
+                ),
               ),
             ],
           ),
@@ -127,20 +164,55 @@ class _WebviewPageState extends State<WebviewPage> {
                     splashRadius: 25,
                     iconSize: 28.0,
                     onPressed: () {
+                      if (!isAlreadyFav) {
+                        if (widget.itemEntity.title != null) {
+                          ItemFavModel itemFavModel = ItemFavModel(
+                            title: widget.itemEntity.title,
+                            image: widget.itemEntity.image,
+                            url: widget.itemEntity.url,
+                            category: widget.itemEntity.category,
+                          );
+
+                          dbHelper.insert(itemFavModel).whenComplete(() {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text('Added To Favorite'),
+                              backgroundColor: AppColor.primaryColor,
+                            ));
+                            fetch();
+                          });
+                        } else {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text('Please try again later'),
+                            backgroundColor: AppColor.redColor,
+                          ));
+                        }
+                      } else {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text('Already have Favorite'),
+                          backgroundColor: AppColor.redColor,
+                        ));
+                      }
                       // Navigator.push(
                       //     context,
                       //     MaterialPageRoute(
                       //         builder: (builder) => const FavoritePage()));
                     },
-                    icon: const Icon(
-                      Icons.favorite,
-                      color: AppColor.redColor,
+                    icon: Icon(
+                      isAlreadyFav ? Icons.favorite : Icons.favorite_outline,
+                      color: isAlreadyFav
+                          ? AppColor.redColor
+                          : AppColor.primaryColor,
                     )),
                 IconButton(
                     padding: const EdgeInsets.all(0.0),
                     splashRadius: 25,
                     iconSize: 28.0,
                     onPressed: () {
+                      // Share.share('Share From Bongo App at ${widget.url}',
+                      //     subject: "Share Now");
                       // Navigator.push(
                       //     context,
                       //     MaterialPageRoute(

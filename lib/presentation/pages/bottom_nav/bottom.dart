@@ -1,5 +1,6 @@
 import 'package:amar_bongo_app/presentation/constants/color.dart';
 import 'package:amar_bongo_app/presentation/pages/favorite/favorite.dart';
+import 'package:amar_bongo_app/presentation/pages/history/history.dart';
 import 'package:amar_bongo_app/presentation/pages/home/home.dart';
 import 'package:amar_bongo_app/presentation/pages/profile/profile.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,7 @@ class _BottomNavPageState extends State<BottomNavPage> {
   final widgetOptions = const [
     HomePage(),
     FavoritePage(),
-    Text('HIstor'),
+    HistoryPage(),
     ProfilePage(),
   ];
   @override

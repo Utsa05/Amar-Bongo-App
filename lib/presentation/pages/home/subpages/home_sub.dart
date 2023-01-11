@@ -3,6 +3,8 @@
 import 'package:amar_bongo_app/domain/entities/item.dart';
 import 'package:amar_bongo_app/presentation/constants/color.dart';
 import 'package:amar_bongo_app/presentation/constants/routes.dart';
+import 'package:amar_bongo_app/presentation/constants/string.dart';
+import 'package:amar_bongo_app/presentation/pages/home/subpages/health.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -20,17 +22,39 @@ class HomeSubPage extends StatelessWidget {
           .toList();
     }
 
-    List<ItemEntity> goverments = getListbyCategory('government', itemList);
+    List<ItemEntity> goverments = getListbyCategory('goverment', itemList);
     List<ItemEntity> shoppings = getListbyCategory('shopping', itemList);
     List<ItemEntity> educations = getListbyCategory('education', itemList);
-    List<ItemEntity> etickets = getListbyCategory('eticket', itemList);
-    List<ItemEntity> jobs = getListbyCategory('job', itemList);
+    List<ItemEntity> etickets = [];
+    List<ItemEntity> railway = getListbyCategory('railway', itemList);
+    List<ItemEntity> carRental = getListbyCategory('car rental', itemList);
+    List<ItemEntity> bus = getListbyCategory('bus', itemList);
+    List<ItemEntity> air = getListbyCategory('air', itemList);
+    List<ItemEntity> hotelBooking =
+        getListbyCategory('hotel booking', itemList);
+    etickets.addAll(bus);
+    etickets.addAll(air);
+    etickets.addAll(railway);
+    etickets.addAll(carRental);
+    etickets.addAll(hotelBooking);
+    List<ItemEntity> jobs = getListbyCategory('jobs', itemList);
+    List<ItemEntity> healths = getListbyCategory('health', itemList);
     return Scaffold(
         body: SingleChildScrollView(
       padding: const EdgeInsets.only(bottom: 20.0),
       physics: const BouncingScrollPhysics(),
       child: Column(
         children: [
+          Itemrow(
+            itemList: healths,
+            title: AppString.health,
+            tap: () {},
+          ),
+          Itemrow(
+            itemList: etickets,
+            title: AppString.eticket,
+            tap: () {},
+          ),
           Itemrow(
             itemList: educations,
             title: "Education",
@@ -39,11 +63,6 @@ class HomeSubPage extends StatelessWidget {
           Itemrow(
             itemList: goverments,
             title: "Goverment",
-            tap: () {},
-          ),
-          Itemrow(
-            itemList: itemList,
-            title: "Health",
             tap: () {},
           ),
           Itemrow(
@@ -119,10 +138,15 @@ class Itemrow extends StatelessWidget {
                     itemList.length,
                     (index) => Stack(
                           children: [
-                            Item(
-                              itemList: itemList,
-                              index: index,
-                            ),
+                            title == AppString.health
+                                ? SizedBox(
+                                    width: MediaQuery.of(context).size.width,
+                                    child: HealthItem(
+                                        searchList: itemList, index: index))
+                                : Item(
+                                    itemList: itemList,
+                                    index: index,
+                                  ),
                             // Positioned(
                             //   right: 0.0,
                             //   top: 0.0,
@@ -178,10 +202,8 @@ class Item extends StatelessWidget {
             color: AppColor.whiteColor,
             elevation: 0.0,
             onPressed: () {
-              Navigator.pushNamed(context, RouteString.viewweb, arguments: {
-                "url": itemList[index].url,
-                "title": itemList[index].title
-              });
+              Navigator.pushNamed(context, RouteString.viewweb,
+                  arguments: itemList[index]);
             },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -217,8 +239,20 @@ class Item extends StatelessWidget {
                         ),
                         placeholder: (context, url) =>
                             const CircularProgressIndicator(),
-                        errorWidget: (context, url, error) =>
-                            const Icon(Icons.error),
+                        errorWidget: (context, url, error) => Container(
+                          width: 78.0,
+                          height: 60.0,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: AppColor.blackColor.withOpacity(0.03),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          child: Icon(
+                            Icons.error_outline,
+                            color: AppColor.blackColor.withOpacity(0.4),
+                            size: 35.0,
+                          ),
+                        ),
                       ),
                 const SizedBox(
                   height: 8.0,

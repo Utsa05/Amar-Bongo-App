@@ -1,5 +1,7 @@
 import 'package:amar_bongo_app/data/data_sources/remote_data_source.dart';
+import 'package:amar_bongo_app/data/models/appinfo_model.dart';
 import 'package:amar_bongo_app/domain/entities/item.dart';
+import 'package:amar_bongo_app/domain/entities/notification.dart';
 import 'package:amar_bongo_app/domain/entities/user.dart';
 import 'package:amar_bongo_app/domain/repositories/firebase_repositories.dart';
 
@@ -45,5 +47,15 @@ class FirebaseRepositoryImpl implements FirebaseRepositories {
   @override
   Stream<List<ItemEntity>> getItems() {
     return remoteDatasource.getItems();
+  }
+
+  @override
+  Stream<List<NotificationEntity>> getNotifications() {
+    return remoteDatasource.getNotifications();
+  }
+
+  @override
+  Future<AppInfoModel> getAppInfo() {
+    return remoteDatasource.getAppInfo();
   }
 }

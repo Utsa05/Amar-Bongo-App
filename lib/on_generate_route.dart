@@ -22,8 +22,9 @@ class AppRoute {
                   itemList: itemList,
                 ));
       case RouteString.viewweb:
-        dynamic argu = arg as dynamic;
-        return MaterialPageRoute(builder: (context) => WebviewPage(url: argu));
+        ItemEntity argu = arg as ItemEntity;
+        return MaterialPageRoute(
+            builder: (context) => WebviewPage(itemEntity: argu));
       default:
         return screenRoute(screen: const ErrorPageRoute());
     }

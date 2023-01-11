@@ -60,10 +60,8 @@ class GridItem extends StatelessWidget {
             color: AppColor.whiteColor,
             elevation: 0.0,
             onPressed: () {
-              Navigator.pushNamed(context, RouteString.viewweb, arguments: {
-                "url": itemList[index].url,
-                "title": itemList[index].title
-              });
+              Navigator.pushNamed(context, RouteString.viewweb,
+                  arguments: itemList[index]);
             },
             child: Stack(
               children: [
@@ -104,8 +102,20 @@ class GridItem extends StatelessWidget {
                               ),
                               placeholder: (context, url) =>
                                   const CircularProgressIndicator(),
-                              errorWidget: (context, url, error) =>
-                                  const Icon(Icons.error),
+                              errorWidget: (context, url, error) => Container(
+                                width: 78.0,
+                                height: 60.0,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: AppColor.blackColor.withOpacity(0.03),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: Icon(
+                                  Icons.error_outline,
+                                  color: AppColor.blackColor.withOpacity(0.4),
+                                  size: 35.0,
+                                ),
+                              ),
                             ),
                       const SizedBox(
                         height: 8.0,

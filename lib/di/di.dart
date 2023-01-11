@@ -4,16 +4,20 @@ import 'package:amar_bongo_app/data/data_sources/remote_data_source.dart';
 import 'package:amar_bongo_app/data/repositories/firebase_repositories_impl.dart';
 import 'package:amar_bongo_app/domain/repositories/firebase_repositories.dart';
 import 'package:amar_bongo_app/domain/usecases/create_user_usecase.dart';
+import 'package:amar_bongo_app/domain/usecases/get_app_info_usecase.dart';
 import 'package:amar_bongo_app/domain/usecases/get_current_user_usecase.dart';
 import 'package:amar_bongo_app/domain/usecases/get_items_usecase.dart';
+import 'package:amar_bongo_app/domain/usecases/get_notification_usecase.dart';
 import 'package:amar_bongo_app/domain/usecases/getcurrent_user_id_usecase.dart';
 import 'package:amar_bongo_app/domain/usecases/google_authentication.dart';
 import 'package:amar_bongo_app/domain/usecases/issignin_usecase.dart';
 import 'package:amar_bongo_app/domain/usecases/signout_usecase.dart';
 import 'package:amar_bongo_app/domain/usecases/updateuser_usecase.dart';
+import 'package:amar_bongo_app/presentation/cubits/appinfo/appinfo_cubit.dart';
 import 'package:amar_bongo_app/presentation/cubits/auth/auth_cubit.dart';
 import 'package:amar_bongo_app/presentation/cubits/credential/credential_cubit.dart';
 import 'package:amar_bongo_app/presentation/cubits/items/items_cubit.dart';
+import 'package:amar_bongo_app/presentation/cubits/notification/notification_cubit.dart';
 import 'package:amar_bongo_app/presentation/cubits/user/user_cubit.dart';
 import 'package:get_it/get_it.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -34,7 +38,11 @@ Future<void> init() async {
       () => CredentialCubit(googleAuthenticationUsecase: sl.call()));
   sl.registerFactory<UserCubit>(
       () => UserCubit(getCurrentUserUsecase: sl.call()));
-  sl.registerFactory(() => ItemsCubit(getItemsUsecase: sl.call()));
+  sl.registerFactory<ItemsCubit>(() => ItemsCubit(getItemsUsecase: sl.call()));
+  sl.registerFactory<NotificationCubit>(
+      () => NotificationCubit(getNotificationUsecase: sl.call()));
+  sl.registerFactory<AppinfoCubit>(
+      () => AppinfoCubit(getAppInfoUsecase: sl.call()));
 
   //usecase
   sl.registerLazySingleton<IsSigninUsecase>(
@@ -53,6 +61,10 @@ Future<void> init() async {
       () => SignoutUsecase(firebaseRepositories: sl.call()));
   sl.registerLazySingleton<GetItemsUsecase>(
       () => GetItemsUsecase(firebaseRepositories: sl.call()));
+  sl.registerLazySingleton<GetNotificationUsecase>(
+      () => GetNotificationUsecase(firebaseRepositories: sl.call()));
+  sl.registerLazySingleton<GetAppInfoUsecase>(
+      () => GetAppInfoUsecase(firebaseRepositories: sl.call()));
 
   //repositories
   sl.registerLazySingleton<FirebaseRemoteDatasource>(() =>
