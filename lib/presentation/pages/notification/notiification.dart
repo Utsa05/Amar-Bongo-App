@@ -149,19 +149,17 @@ class NotificationPage extends StatelessWidget {
                 : const Center(
                     child: Text("No Notification"),
                   );
-          }
-          if (state is NotificationNoInternet) {
+          } else if (state is NotificationNoInternet) {
             return const NoInteret();
-          }
-          if (state is NotificationFailure) {
+          } else if (state is NotificationFailure) {
             return const Center(
               child: Text("Something Wrong"),
             );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           }
-
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
         },
       ),
     );

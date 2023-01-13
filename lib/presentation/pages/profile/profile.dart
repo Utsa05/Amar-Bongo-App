@@ -56,7 +56,7 @@ class ProfilePage extends StatelessWidget {
                         child: ItemWIdget(
                           tap: () {
                             _sendingMails(
-                                "'mailto:nullit00@gmail.com?subject=Suggestion&body= '");
+                                'mailto:nullit00@gmail.com?subject=Suggestion&body= ');
                           },
                           title: "Contact Us",
                           icon: Icons.email_outlined,
@@ -69,6 +69,13 @@ class ProfilePage extends StatelessWidget {
                               subject: "Share Now");
                         },
                         title: "Share App",
+                        icon: Icons.share,
+                      ),
+                      ItemWIdget(
+                        tap: () {
+                          _sendingMails(state.appInfoModel.shareapp!);
+                        },
+                        title: "Update App",
                         icon: Icons.share,
                       ),
                       ItemWIdget(
@@ -121,8 +128,7 @@ class ProfileTileView extends StatelessWidget {
           return const Center(
             child: CircularProgressIndicator(),
           );
-        }
-        if (state is Authenticated) {
+        } else if (state is Authenticated) {
           BlocProvider.of<UserCubit>(context).getCurrentUser(state.uid);
           return BlocBuilder<UserCubit, UserState>(
             builder: (context, state) {
@@ -130,9 +136,7 @@ class ProfileTileView extends StatelessWidget {
                 return const Center(
                   child: CircularProgressIndicator(),
                 );
-              }
-
-              if (state is UserIsLoaded) {
+              } else if (state is UserIsLoaded) {
                 return Stack(
                   children: [
                     ProfileTile(
@@ -193,21 +197,22 @@ class ProfileTileView extends StatelessWidget {
                     )
                   ],
                 );
-              }
-
-              if (state is AuthNoInternet) {
+              } else if (state is UserIsNoInternet) {
                 return const NoInteret();
+              } else {
+                return const Center(
+                  child: Text("Something Worong"),
+                );
               }
-
-              return const Center(
-                child: Text("Something Worong"),
-              );
             },
           );
+        } else if (state is AuthNoInternet) {
+          return const NoInteret();
+        } else {
+          return const ProfileTile(
+            user: UserEntity(),
+          );
         }
-        return const ProfileTile(
-          user: UserEntity(),
-        );
       },
     );
   }

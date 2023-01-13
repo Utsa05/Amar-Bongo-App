@@ -17,12 +17,12 @@ class ItemsCubit extends Cubit<ItemsState> {
     print("call items");
     emit(ItemsLoading());
 
-    final stramResponse = getItemsUsecase.call();
-    stramResponse.listen((itemList) {
-      emit(ItemsLoaded(itemList: itemList));
-    });
-
-    try {} on SocketException {
+    try {
+      final stramResponse = getItemsUsecase.call();
+      stramResponse.listen((itemList) {
+        emit(ItemsLoaded(itemList: itemList));
+      });
+    } on SocketException {
       emit(ItemsNoInternet());
     } catch (e) {
       emit(ItemsFailuare());

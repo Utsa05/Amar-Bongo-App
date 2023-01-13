@@ -141,14 +141,17 @@ class _HomePageState extends State<HomePage> {
                     )),
                   ],
                 );
-              }
-
-              if (state is ItemsNoInternet) {
+              } else if (state is ItemsNoInternet) {
                 return const NoInteret();
+              } else if (state is ItemsFailuare) {
+                return const Center(
+                  child: Text("Something Wrong"),
+                );
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
               }
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
             },
           ),
         ),
@@ -193,7 +196,7 @@ class _TabviewState extends State<Tabview> {
   List<ItemEntity> jobs = [];
 
   getAllItem() {
-    goverments = getListbyCategory('government', widget.itemList);
+    goverments = getListbyCategory('goverment', widget.itemList);
     shoppings = getListbyCategory('shopping', widget.itemList);
     educations = getListbyCategory('education', widget.itemList);
 

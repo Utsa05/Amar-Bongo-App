@@ -28,6 +28,9 @@ class _HistoryPageState extends State<HistoryPage> {
         NavigationDelegate(
           onProgress: (int progress) {
             debugPrint('WebView is loading (progress : $progress%)');
+            setState(() {
+              loadPercentage = progress;
+            });
           },
           onPageStarted: (String url) {
             debugPrint('Page started loading: $url');
@@ -51,6 +54,15 @@ class _HistoryPageState extends State<HistoryPage> {
       ..loadRequest(Uri.parse(url));
   }
 
+  int loadPercentage = 0;
+  @override
+  void dispose() {
+    _controller.clearCache();
+    _controller.clearLocalStorage();
+
+    super.dispose();
+  }
+
   final String url = 'https://en.wikipedia.org/wiki/Bangladesh';
   @override
   Widget build(BuildContext context) {
@@ -69,10 +81,28 @@ class _HistoryPageState extends State<HistoryPage> {
         child: SafeArea(
           child: Scaffold(
             body: _isLoading == true
-                ? const Center(
-                    child: CircularProgressIndicator(
-                      color: AppColor.goldenColor,
-                    ),
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const LinearProgressIndicator(
+                        color: AppColor.goldenColor,
+                      ),
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                      CircleAvatar(
+                        backgroundColor: AppColor.goldenColor,
+                        radius: 25.0,
+                        child: Text(
+                          "${loadPercentage.toString()}%",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText2!
+                              .copyWith(color: AppColor.whiteColor),
+                        ),
+                      )
+                    ],
                   )
                 : WebViewWidget(controller: _controller),
           ),
